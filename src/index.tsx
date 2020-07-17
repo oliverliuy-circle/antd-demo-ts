@@ -2,38 +2,37 @@ import React, { Component, MouseEvent, MouseEventHandler, Requireable } from 're
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import Item from 'antd/lib/list/Item'
+import { createPublicKey } from 'crypto'
 
-interface BlogProps {
-  posts: {
-    id: number
-    title: string
-    content: string
-  }[]
+interface HelloProps {
+  name: string
 }
-class Blog extends Component<BlogProps>{
-  lis: JSX.Element[] = this.props.posts.map(
-    (item) => <li key={item.id}>{item.title}</li>
-  )
-  hs: JSX.Element[] = this.props.posts.map(
-    (item) => <div> <h1 key={'h1' + item.id}>{item.title}</h1><h2 key={'h2' + item.id}>{item.content}</h2></div>
-  )
+interface HelloState {
+  opacity: number
+}
+class Hello extends React.Component<HelloProps, HelloState> {
+  constructor(props: HelloProps) {
+    super(props);
+    this.state = { opacity: 1.0 };
+  }
+  componentDidMount(): void {
+    window.setInterval(() => {
+      let opacity: number = this.state.opacity;
+      opacity -= .05;
+      if (opacity < 0.1) {
+        opacity = 1.0;
+      }
+      this.setState({
+        opacity: opacity
+      });
+    }, 100);
+  }
   render(): JSX.Element {
     return (
-      <div>
-        <ul>{this.lis}</ul>
-        <hr></hr>
-        {this.hs}
+      <div style={{ opacity: this.state.opacity }}>
+        Hello {this.props.name}
       </div>
-    )
+    );
   }
 }
-const posts: {
-  id: number
-  title: string
-  content: string
-}[] = [
-    { id: 1, title: 'Hello World', content: 'Welcome to learning React!' },
-    { id: 2, title: 'Installation', content: 'You can install React from npm.' },
-    { id: 3, title: 'oliver', content: 'hello oliver.' }
-  ];
-ReactDOM.render(<Blog posts={posts} />, document.getElementById('example'))
+ReactDOM.render(<Hello name="world" />, document.body);
