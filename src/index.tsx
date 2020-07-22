@@ -1,38 +1,20 @@
-import React, { Component, MouseEvent, MouseEventHandler, Requireable } from 'react'
+import React, { Component, DetailedHTMLProps, InputHTMLAttributes } from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-import Item from 'antd/lib/list/Item'
-import { createPublicKey } from 'crypto'
 
-interface HelloProps {
-  name: string
-}
-interface HelloState {
-  opacity: number
-}
-class Hello extends React.Component<HelloProps, HelloState> {
-  constructor(props: HelloProps) {
-    super(props);
-    this.state = { opacity: 1.0 };
-  }
-  componentDidMount(): void {
-    window.setInterval(() => {
-      let opacity: number = this.state.opacity;
-      opacity -= .05;
-      if (opacity < 0.1) {
-        opacity = 1.0;
-      }
-      this.setState({
-        opacity: opacity
-      });
-    }, 100);
+class MyComponent extends Component {
+  refs!: {
+    [key: string]: HTMLInputElement;
+  };
+  handleClick(): void {
+    this.refs.myInput.focus();
   }
   render(): JSX.Element {
     return (
-      <div style={{ opacity: this.state.opacity }}>
-        Hello {this.props.name}
+      <div>
+        <input type='text' ref='myInput' />
+        <input type='button' value='点我输入框获取焦点' onClick={this.handleClick.bind(this)} />
       </div>
-    );
+    )
   }
 }
-ReactDOM.render(<Hello name="world" />, document.body);
+ReactDOM.render(<MyComponent />, document.getElementById('example'))
